@@ -9,7 +9,20 @@
         <result column="date" property="date" jdbcType="TIMESTAMP" />
     </resultMap>
 
+    <resultMap id="test" type="java.util.HashMap">
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="price" property="price" jdbcType="DOUBLE" />
+        <result column="status" property="status" jdbcType="INTEGER" />
+        <result column="date" property="date" jdbcType="TIMESTAMP" />
+    </resultMap>
+
     <select id="get" resultMap="ttt">
         select * from ttt;
     </select>
+
+    <select id="get_test" resultMap="test">
+        select * from ttt;
+    </select>
+
 </mapper>

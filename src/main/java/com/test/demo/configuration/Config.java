@@ -1,6 +1,6 @@
-package com.test.demo.config;
+package com.test.demo.configuration;
 
-import com.test.demo.util.IpUtil;
+import com.test.demo.utils.IpUtil;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.boot.web.servlet.ServletListenerRegistrationBean;

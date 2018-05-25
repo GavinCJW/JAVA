@@ -5,8 +5,6 @@ import lombok.Data;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
 
 @Data
 @Entity(name = "ttt")
