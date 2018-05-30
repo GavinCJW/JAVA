@@ -1,9 +1,8 @@
 package com.test.demo.controller;
 
 import cn.afterturn.easypoi.excel.annotation.Excel;
-import com.test.demo.repository.UserRepository;
-import com.test.demo.mapper.UserMapper;
 import com.test.demo.model.User;
+import com.test.demo.service.UserService;
 import com.test.demo.utils.CglibUtil;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,19 +26,16 @@ import java.util.UUID;
 public class TestController extends HttpServlet {
 
     @Resource
-    private UserRepository _repository;
-
-    @Resource
-    private UserMapper _mapper;
+    private UserService _service;
 
     @RequestMapping("/mybatis")
     private List<User> mybatis(){
-        return _mapper.get();
+        return _service.get();
     }
 
     @RequestMapping("/jpa")
     private List<User> jpa(){
-        return _repository.findAllBy();
+        return _service.findAllBy();
     }
 
     @RequestMapping("/test")
@@ -49,9 +45,23 @@ public class TestController extends HttpServlet {
 
     }
 
+    @RequestMapping("/insert")
+    private void insert(){
+        _service.insert(new User(){
+            {
+                setId(6);
+                setName("PPPP");
+                setPrice(131.1231);
+                setDate("2018-04-13 18:34:44");
+                setStatus(0);
+            }
+        });
+
+    }
+
     @RequestMapping("/ttt")
     private List<Map<String,Object>> ttt(){
-        return _mapper.get_test();
+        return _service.select();
     }
 
     @RequestMapping("/aaa")

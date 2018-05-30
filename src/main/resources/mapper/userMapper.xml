@@ -21,8 +21,12 @@
         select * from ttt;
     </select>
 
-    <select id="get_test" resultMap="test">
+    <select id="select" resultMap="test">
         select * from ttt;
     </select>
+
+    <insert id="insert" parameterType="com.test.demo.model.User">
+        insert into ttt(name,price,status,date) values(#{name},#{price},#{status},#{date});
+    </insert>
 
 </mapper>

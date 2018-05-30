@@ -1,7 +1,7 @@
 package com.test.demo.controller;
 
-import com.test.demo.mapper.UserMapper;
 import com.test.demo.model.User;
+import com.test.demo.service.UserService;
 import com.test.demo.utils.ExcelUtil;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,12 +18,12 @@ import java.util.HashMap;
 public class ExcelController {
 
     @Resource
-    private UserMapper _mapper;
+    private UserService _service;
 
     @RequestMapping("/excel/export")
     private void exportExcel(HttpServletResponse response){
         //ExcelUtil.exportExcel(_mapper.get(),User.class,response);
-        ExcelUtil.exportExcel(_mapper.get_test(),new HashMap<String,String>(){
+        ExcelUtil.exportExcel(_service.select(),new HashMap<String,Object>(){
             {
                 put("status","状态");
                 put("name","姓名");

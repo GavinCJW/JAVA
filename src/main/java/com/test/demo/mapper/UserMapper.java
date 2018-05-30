@@ -9,5 +9,7 @@ public interface UserMapper {
 
     List<User> get();
 
-    List<Map<String,Object>> get_test();
+    List<Map<String,Object>> select();
+
+    Long insert(User user);
 }

@@ -1,12 +1,10 @@
 package com.test.demo.model;
 
 import cn.afterturn.easypoi.excel.annotation.Excel;
-import lombok.Data;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
-@Data
 @Entity(name = "ttt")
 public class User {
         @Id
@@ -19,5 +17,45 @@ public class User {
         private double price;
         @Excel(name = "生日", orderNum = "2")
         private String date;
+
+        public int getId() {
+                return id;
+        }
+
+        public void setId(int id) {
+                this.id = id;
+        }
+
+        public int getStatus() {
+                return status;
+        }
+
+        public void setStatus(int status) {
+                this.status = status;
+        }
+
+        public String getName() {
+                return name;
+        }
+
+        public void setName(String name) {
+                this.name = name;
+        }
+
+        public double getPrice() {
+                return price;
+        }
+
+        public void setPrice(double price) {
+                this.price = price;
+        }
+
+        public String getDate() {
+                return date;
+        }
+
+        public void setDate(String date) {
+                this.date = date;
+        }
 
 }
