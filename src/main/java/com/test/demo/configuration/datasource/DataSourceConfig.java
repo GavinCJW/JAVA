@@ -10,34 +10,34 @@ import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;
 
 import javax.sql.DataSource;
 import java.util.HashMap;
-import java.util.Map;
 
 @Configuration
 public class DataSourceConfig {
 
-    @Bean(name="dataSource")
-    @ConfigurationProperties(prefix = "spring.datasource")
+    //主数据源
+    @Bean(name=DataSourceKey.Default)
+    @ConfigurationProperties(prefix = DataSourceKey.Default)
     public DataSource dataSource() {
         return DataSourceBuilder.create().build();
     }
 
     //数据源1
-    @Bean(name="dataSource1")
-    @ConfigurationProperties(prefix = "spring.datasource.db1")
+    @Bean(name=DataSourceKey.DB1)
+    @ConfigurationProperties(prefix = DataSourceKey.DB1)
     public DataSource dataSource1() {
         return DataSourceBuilder.create().build();
     }
 
     //数据源2
-    @Bean(name="dataSource2")
-    @ConfigurationProperties(prefix = "spring.datasource.db2")
+    @Bean(name=DataSourceKey.DB2)
+    @ConfigurationProperties(prefix = DataSourceKey.DB2)
     public DataSource dataSource2() {
         return DataSourceBuilder.create().build();
     }
 
     @Primary
     @Bean("dynamicDataSource")
-    @DependsOn({"dataSource","dataSource1","dataSource2"})
+    @DependsOn({DataSourceKey.Default,DataSourceKey.DB1,DataSourceKey.DB2})
     public DataSource dynamicDataSource() {
         AbstractRoutingDataSource dynamicRoutingDataSource = new AbstractRoutingDataSource(){
             @Override
@@ -45,13 +45,14 @@ public class DataSourceConfig {
                 return DataSourceContextHolder.getDB();
             }
         };
-        Map<Object, Object> dataSourceMap = new HashMap<>();
-        dataSourceMap.put(DataSourceKey.Default, dataSource());
-        dataSourceMap.put(DataSourceKey.DB1, dataSource1());
-        dataSourceMap.put(DataSourceKey.DB2, dataSource2());
-
         dynamicRoutingDataSource.setDefaultTargetDataSource(dataSource());
-        dynamicRoutingDataSource.setTargetDataSources(dataSourceMap);
+        dynamicRoutingDataSource.setTargetDataSources(new HashMap<Object, Object>(){
+            {
+                put(DataSourceKey.Default, dataSource());
+                put(DataSourceKey.DB1, dataSource1());
+                put(DataSourceKey.DB2, dataSource2());
+            }
+        });
 
         return dynamicRoutingDataSource;
     }

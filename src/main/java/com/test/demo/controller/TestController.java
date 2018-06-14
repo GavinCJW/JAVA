@@ -4,8 +4,12 @@ import cn.afterturn.easypoi.excel.annotation.Excel;
 import com.test.demo.model.User;
 import com.test.demo.service.UserService;
 import com.test.demo.utils.CglibUtil;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
@@ -23,29 +27,34 @@ import java.util.UUID;
 
 @RestController
 @EnableAutoConfiguration
+@Api(value = "TestController", description = "测试专用接口")
 public class TestController extends HttpServlet {
 
     @Resource
     private UserService _service;
 
-    @RequestMapping("/mybatis")
+    @ApiOperation(value="查询mybatis", notes="查询mybatis接口")
+    @ApiImplicitParams({
+
+    })
+    @GetMapping("/mybatis")
     private List<User> mybatis(){
         return _service.get();
     }
 
-    @RequestMapping("/jpa")
+    @GetMapping("/jpa")
     private List<User> jpa(){
         return _service.findAllBy();
     }
 
-    @RequestMapping("/test")
+    @GetMapping("/test")
     private void test(HttpServletRequest request){
         HttpSession session=request.getSession();
         session.invalidate();
 
     }
 
-    @RequestMapping("/insert")
+    @GetMapping("/insert")
     private void insert(){
         _service.insert(new User(){
             {
@@ -59,12 +68,12 @@ public class TestController extends HttpServlet {
 
     }
 
-    @RequestMapping("/ttt")
+    @GetMapping("/ttt")
     private List<Map<String,Object>> ttt(){
         return _service.select();
     }
 
-    @RequestMapping("/aaa")
+    @GetMapping("/aaa")
     private Object aaa()throws ClassNotFoundException{
         HashMap propertyMap = new HashMap();
 

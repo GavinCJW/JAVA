@@ -4,9 +4,7 @@ import com.test.demo.model.User;
 import com.test.demo.service.UserService;
 import com.test.demo.utils.ExcelUtil;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
@@ -20,7 +18,7 @@ public class ExcelController {
     @Resource
     private UserService _service;
 
-    @RequestMapping("/excel/export")
+    @GetMapping("/excel/export")
     private void exportExcel(HttpServletResponse response){
         //ExcelUtil.exportExcel(_mapper.get(),User.class,response);
         ExcelUtil.exportExcel(_service.select(),new HashMap<String,Object>(){
@@ -33,7 +31,7 @@ public class ExcelController {
         },response);
     }
 
-    @RequestMapping("/excel/import")
+    @PostMapping("/excel/import")
     private Collection<?> importExcel(@RequestParam("File") MultipartFile file){
         System.out.println("dfadsfas");
         return ExcelUtil.importExcel(file,User.class);
