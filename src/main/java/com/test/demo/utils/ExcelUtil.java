@@ -15,7 +15,6 @@ import java.io.File;
 import java.net.URLEncoder;
 import java.util.*;
 
-@Service
 public class ExcelUtil {
     //配置参数变量
     private static Map<String,Object> _export = new HashMap<String, Object>(){

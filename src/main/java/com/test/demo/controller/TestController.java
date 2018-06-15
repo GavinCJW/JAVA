@@ -9,8 +9,7 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServlet;
@@ -28,52 +27,54 @@ import java.util.UUID;
 @RestController
 @EnableAutoConfiguration
 @Api(value = "TestController", description = "测试专用接口")
+@RequestMapping("test")
 public class TestController extends HttpServlet {
 
     @Resource
     private UserService _service;
 
     @ApiOperation(value="查询mybatis", notes="查询mybatis接口")
-    @ApiImplicitParams({
-
-    })
-    @GetMapping("/mybatis")
+    @ApiImplicitParams({})
+    @GetMapping("mybatis")
     private List<User> mybatis(){
         return _service.get();
     }
 
-    @GetMapping("/jpa")
+    @GetMapping("jpa")
     private List<User> jpa(){
         return _service.findAllBy();
     }
 
-    @GetMapping("/test")
+    @GetMapping("test")
     private void test(HttpServletRequest request){
         HttpSession session=request.getSession();
         session.invalidate();
 
     }
 
-    @GetMapping("/insert")
-    private void insert(){
-        _service.insert(new User(){
-            {
-                setId(6);
-                setName("PPPP");
-                setPrice(131.1231);
-                setDate("2018-04-13 18:34:44");
-                setStatus(0);
-            }
-        });
-
+    @DeleteMapping("{id}")
+    private void delete(@PathVariable int id){
+        System.out.println(id);
+        //_service.delete(id);
     }
 
-    @GetMapping("/ttt")
+    @PostMapping
+    private void insert(@RequestParam String id){
+        System.out.println(id);
+        //_service.insert(user);
+    }
+
+    @PutMapping
+    private void update(@RequestParam int id){
+        System.out.println(id);
+    }
+
+    @GetMapping("ttt")
     private List<Map<String,Object>> ttt(){
         return _service.select();
     }
 
-    @GetMapping("/aaa")
+    @GetMapping("aaa")
     private Object aaa()throws ClassNotFoundException{
         HashMap propertyMap = new HashMap();
 

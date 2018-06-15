@@ -31,10 +31,12 @@ public class UserService {
     }
 
     public List<User> findAllBy(){
-        return _repository.findAllBy();
+        return _repository.findAll();
     }
 
     public void insert(User user){
         _mapper.insert(user);
     }
+
+    public void delete(String id){ _repository.deleteById(id);}
 }
