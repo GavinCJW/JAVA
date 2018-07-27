@@ -5,6 +5,7 @@ import org.springframework.boot.web.servlet.ServletListenerRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import javax.annotation.PreDestroy;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.ServletRequestEvent;
@@ -12,12 +13,15 @@ import javax.servlet.ServletRequestListener;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
-import java.io.*;
 import java.util.Arrays;
 import java.util.Date;
 
 @Configuration
 public class ListenerConfig {
+
+    @PreDestroy
+    public void destory() {
+    }
 
     //servlet启动监听器
     @Bean
@@ -26,36 +30,13 @@ public class ListenerConfig {
         slrb.setListener(new ServletContextListener(){
             @Override
             public void contextDestroyed(ServletContextEvent sce) {
-                System.out.println("contextDestroyed" + "," + new Date());
-                File file = new File("D:\\count.txt");
-                try {
-                    FileOutputStream fileOutputStream = new FileOutputStream(file);
-                    OutputStreamWriter outputStreamWriter = new OutputStreamWriter(fileOutputStream, "utf-8");
-                    BufferedWriter bufferedWriter = new BufferedWriter(outputStreamWriter);
-                    bufferedWriter.write(sce.getServletContext().getAttribute("count").toString());
-                    bufferedWriter.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                System.out.println("关闭servlet,此次应用总访问量：" +sce.getServletContext().getAttribute("count"));
             }
             @Override
             public void contextInitialized(ServletContextEvent sce) {
-                System.out.println("contextInitialized" + "," + new Date());
-                File file = new File("D:\\Download\\count.txt");
-                if (file.exists()) {
-                    try {
-                        FileInputStream fileInputStream = new FileInputStream(file);
-                        InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream, "utf-8");
-                        BufferedReader bReader = new BufferedReader(inputStreamReader);
-                        Integer count = Integer.valueOf(bReader.readLine());
-                        System.out.println("历史访问次数：" + count);
-                        sce.getServletContext().setAttribute("count", count);
-                        sce.getServletContext().setAttribute("lineCount", 0);
-                        bReader.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
+                System.out.println("启动servlet,此次启动访问量：0");
+                sce.getServletContext().setAttribute("count", 0);
+                sce.getServletContext().setAttribute("lineCount", 0);
             }
         });
         return slrb;

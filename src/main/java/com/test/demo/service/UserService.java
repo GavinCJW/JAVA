@@ -2,6 +2,7 @@ package com.test.demo.service;
 
 import com.test.demo.configuration.datasource.DataSource;
 import com.test.demo.configuration.datasource.DataSourceKey;
+import com.test.demo.configuration.Watch.Watch;
 import com.test.demo.mapper.UserMapper;
 import com.test.demo.model.User;
 import com.test.demo.repository.UserRepository;
@@ -19,17 +20,17 @@ public class UserService {
 
     @Resource
     private UserRepository _repository;
-
+    @Watch
     @DataSource(DataSourceKey.DB1)
     public List<Map<String,Object>> select(){
         return _mapper.select();
     }
-
+    @Watch
     @DataSource(DataSourceKey.DB1)
     public List<User> get() {
         return _mapper.get();
     }
-
+    @Watch
     public List<User> findAllBy(){
         return _repository.findAll();
     }

@@ -4,10 +4,14 @@ import cn.afterturn.easypoi.excel.annotation.Excel;
 import com.test.demo.model.User;
 import com.test.demo.service.UserService;
 import com.test.demo.utils.CglibUtil;
+import com.test.demo.utils.HttpUtil;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,10 +23,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 @RestController
 @EnableAutoConfiguration
@@ -31,25 +32,28 @@ import java.util.UUID;
 public class TestController extends HttpServlet {
 
     @Resource
-    private UserService _service;
+    private UserService user_service;
+
+    @Value("${jwt.key}")
+    private String jwt_key;
 
     @ApiOperation(value="查询mybatis", notes="查询mybatis接口")
     @ApiImplicitParams({})
     @GetMapping("mybatis")
     private List<User> mybatis(){
-        return _service.get();
+        return user_service.get();
     }
 
     @GetMapping("jpa")
     private List<User> jpa(){
-        return _service.findAllBy();
+        return user_service.findAllBy();
     }
 
     @GetMapping("test")
     private void test(HttpServletRequest request){
-        HttpSession session=request.getSession();
-        session.invalidate();
-
+        /*HttpSession session=request.getSession();
+        session.invalidate();*/
+        System.out.println(HttpUtil.get("http://www.baidu.com"));
     }
 
     @DeleteMapping("{id}")
@@ -71,7 +75,7 @@ public class TestController extends HttpServlet {
 
     @GetMapping("ttt")
     private List<Map<String,Object>> ttt(){
-        return _service.select();
+        return user_service.select();
     }
 
     @GetMapping("aaa")
@@ -122,5 +126,24 @@ public class TestController extends HttpServlet {
         System.out.println(UUID.randomUUID().toString().split("-")[0].trim());
 
         return bean.getObject();
+    }
+
+
+    @PostMapping("login")
+    public String login(@RequestParam String name , @RequestParam String password) throws Exception {
+        // Check if username and password is null
+        if (name.equals("") || password.equals(""))
+            throw new Exception("Please fill in username and password");
+
+        // Check if the username is used
+        if(name.equals("123") || password.equals("123")){
+            throw new Exception("Please fill in username and password");
+        }
+
+        // Create Twt token
+        String jwtToken = Jwts.builder().setSubject(name).claim("roles", "member").setIssuedAt(new Date())
+                .signWith(SignatureAlgorithm.HS256, jwt_key).compact();
+
+        return jwtToken;
     }
 }
