@@ -2,15 +2,16 @@ package com.test.demo.controller;
 
 import cn.afterturn.easypoi.excel.annotation.Excel;
 import com.test.demo.model.User;
+import com.test.demo.service.TestService;
 import com.test.demo.service.UserService;
 import com.test.demo.utils.CglibUtil;
 import com.test.demo.utils.HttpUtil;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +19,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
@@ -145,5 +145,13 @@ public class TestController extends HttpServlet {
                 .signWith(SignatureAlgorithm.HS256, jwt_key).compact();
 
         return jwtToken;
+    }
+
+    @Autowired
+    TestService testService;
+
+    @GetMapping(value = "/hi")
+    public String sayHi(@RequestParam String name){
+        return testService.sayHiFromClientOne(name);
     }
 }
